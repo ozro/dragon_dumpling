@@ -3,6 +3,9 @@ class GPIOProcessor:
     keep track of them. Pins 23-34 have the their corresponding GPIO number
     stored so that they may easily called with the appropriate getPin method.
     '''
+    global LED_PATH
+    LED_PATH = "/sys/class/leds/apq8016-sbc:green:user4"
+    MAX_BRIGHTNESS = "255"
 
     def __init__(self):
         self.GPIOList = []
@@ -62,6 +65,11 @@ class GPIOProcessor:
             pin.closePin()
         self.GPIOList = []
 
+    def setLED(self,bright):
+        file = open(LED_PATH+"/brightness", 'w')
+        file.write(str(int(bright*255)))
+        file.close()
+
 class GPIO:
     '''This is the GPIO class.  This class contains methods that can be used to
     control the GPIO's.  It is used by the GPIOProcessor class. These methods
@@ -84,12 +92,13 @@ class GPIO:
         file.close()
 
     def setDirection(self,direction):
-	print PATH + "gpio" + str(self.pin_number) + "/direction"
+        print(PATH + "gpio" + str(self.pin_number) + "/direction: " + direction)
         file = open(PATH + "gpio" + str(self.pin_number) + "/direction",'w')
         file.write(str(direction))
         file.close()
 
     def setValue(self,value):
+        print(PATH + "gpio" + str(self.pin_number) + "/value: " + str(value))
         file = open(PATH + "gpio" + str(self.pin_number) + "/value",'w')
         file.write(str(value))
         file.close()

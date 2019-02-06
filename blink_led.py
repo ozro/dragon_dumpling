@@ -4,19 +4,14 @@ import time
 GP = GPIOProcessor()
 
 try:
-    Pin27 = GP.getPin27()
-    Pin27.out()
-
-    Pin29 = GP.getPin29()
-    Pin29.input()	
-
+    on = False
     for i in range(0,20):
-        pinValue = Pin29.getValue();
-	
-	if pinValue == 1:
-	    Pin27.high()
+    
+        if not on:
+            GP.setLED(1)
         else:
-            Pin27.low()
+            GP.setLED(0)
+        on = not on
         time.sleep(1)
 
 finally:
